@@ -41,7 +41,10 @@ ip6_bin() {
 	for oct in "${arr_ip[@]}"; do
 		if [ -z "$oct" ]; then
 			for ((j="$((${#arr_ip[@]}-1))"; j<=16; j++)); do
-				echo -n "${_2B[0]} "
+				echo -n "${_2B[0]}"
+				if [ $i -lt $((${#arr_ip[@]}-1)) ]; then
+					echo -n " "
+				fi
 			done
 		else
 			p1=${oct:0:2}
