@@ -1,11 +1,28 @@
 #! /usr/bin/bash
 
-# convert decimal to binary (octet size)
+
+# every convertion from there respect the size of an octet
+######################################################
+# decimal to binary
 _2B=({0..1}{0..1}{0..1}{0..1}{0..1}{0..1}{0..1}{0..1})
+# decimal to hexadecimal
 _2H=({{0..9},{A..F}}{{0..9},{A..F}})
+# decimal to octal
+_2O=({0..7}{0..7}{0..7}{0..7})
+
+declare -A modes=(
+	['binary']=0
+	['octal']=1
+	['decimal']=2
+	['hexadecimal']=3
+)
 
 hex_to_dec() {
 	echo -n "$((16#$1))"
+}
+
+oct_to_dec() {
+	echo -n "$((8#$1))"
 }
 
 mac_bin() {
