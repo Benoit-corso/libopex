@@ -1,0 +1,61 @@
+#! /usr/bin/bash
+
+# convert decimal to binary (octet size)
+_2B=({0..1}{0..1}{0..1}{0..1}{0..1}{0..1}{0..1}{0..1})
+_2H=({{0..9},{A..F}}{{0..9},{A..F}})
+
+hex_to_dec() {
+	echo -n "$((16#$1))"
+}
+
+mac_bin() {
+	local arr_mac
+	IFS=':' read -r -a arr_mac <<< "$1"
+	i=0
+	for oct in "${arr_mac[@]}"; do
+		echo -n "${_2B[$(hex_to_dec $oct)]}"
+		if [ "$i" -lt "$((${#arr_mac[@]} - 1))" ]; then
+			echo -n " "
+		fi
+		((i++))
+	done
+}
+
+ip_bin() {
+	local arr_ip
+	IFS='.' read -r -a arr_ip <<< "$1"
+	i=0
+	for oct in "${arr_ip[@]}"; do
+		echo -n "${_2B[$oct]}"
+		if [ "$i" -lt "$((${#arr_ip[@]} - 1))" ]; then
+			echo -n " "
+		fi
+		((i++))
+	done
+}
+
+ip6_bin() {
+	local arr_ip
+	IFS=':' read -r -a arr_ip <<< "$1"
+	i=0
+	for oct in "${arr_ip[@]}"; do
+		if [ -z "$oct" ]; then
+			for ((j="$((${#arr_ip[@]}-1))"; j<=16; j++)); do
+				echo -n "${_2B[0]} "
+			done
+		else
+			p1=${oct:0:2}
+			p2=${oct:2:2}
+			for ((j="$((${#p2}))"; j<2; j++)); do
+				p2="${p2}0"
+			done
+			echo -n "${_2B[$(hex_to_dec $p1)]} "
+			echo -n "${_2B[$(hex_to_dec $p2)]}"
+			if [ "$i" -lt "$((${#arr_ip[@]} - 1))" ]; then
+				echo -n " "
+			fi
+		fi
+		((i++))
+	done
+}
+
